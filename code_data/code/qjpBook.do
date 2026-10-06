@@ -90,6 +90,7 @@ set more off
 	
 	*-- 产生模型数据
 	clear
+	set seed 10000
 	quiet set obs 200
 	//产生200个观测点
 	gen x = 5*rnormal(0,1)
@@ -120,6 +121,7 @@ set more off
 	
 	*-- 产生模型数据
 	clear
+	set seed 10000
 	quiet set obs 200
 	//产生200个观测点
 	gen time = _n
@@ -230,7 +232,7 @@ set more off
 	use qjpBook_chap06.dta, clear
 	tabstat age education black hispanic married nodegree re74 re75, ///
 		statistics(mean) by(treat)
-	pscore treat age education black hispanic married nodegree re74 re75, /// 
+	pscore treat age education black hispanic married nodegree re74 re75 /// 
 		un74 un75, logit comsup blockid(block) pscore(myscore)	
 	/*
 	- treat 处置变量
@@ -280,7 +282,7 @@ set more off
 	psmatch2 treat, pscore(myscore) outcome(re78) neighbor(1) common ties
 	// psmatch2 treat if comsup == 1, pscore(myscore) outcome(re78) neighbor(1) common ties
 	//使用common support 选项
-	bootstrap r(att), reps(100): psmatch2 treat age2 age3 education education2 black ///
+	bootstrap r(att), reps(100): psmatch2 treat age age2 age3 education education2 black ///
 		hispanic married nodegree re74 re742 re75 re752 un74 un75 educationre74, logit ///
 		outcome(re78) neighbor(1) common ties
 	//使用 bootstrap 和 common support 选项
@@ -289,7 +291,7 @@ set more off
 	cd "$path/final/chapter_06"
 	use v2_qjpBook_chap06.dta, clear
 	teffects psmatch (re78) (treat age age2 age3 education education2 black hispanic ///
-		married nodegree re74 re742 re75 re752 un74 un75 educationre74, logit), ///\
+		married nodegree re74 re742 re75 re752 un74 un75 educationre74, logit), ///
 		atet nneighbor(1)
 	//没有使用 common support 选项
 
@@ -518,6 +520,7 @@ set more off
 	*-- 手动估计模型
 	cd "$path/final/chapter_11"
 	use qjpBook_chap11.dta, clear
+	set seed 10000
 	sample 500, count
 	//随机抽取500个观测点
 	keep wage age education children
